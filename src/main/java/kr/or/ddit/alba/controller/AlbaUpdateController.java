@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -67,7 +68,7 @@ public class AlbaUpdateController {
 //			}
 //		}
 		
-		Map<String, String> errors = new HashMap<>();
+		Map<String, List<CharSequence>> errors = new HashMap<>();
 		req.setAttribute("errors", errors);
 		GeneralValidator validator = new GeneralValidator();
 		boolean valid = validator.validate(alba, errors, UpdateHint.class);
