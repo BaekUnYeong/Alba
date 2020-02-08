@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.board.dao.IAttatchDAO">
-	<insert id="insertAttach" parameterType="boardVO">
+	<insert id="insertAttach" parameterType="albaVO">
 		<selectKey resultType="int" keyProperty="startAttNo" order="BEFORE">
 			SELECT NVL(MAX(ATT_NO), 0)+1 FROM ATTATCH
 		</selectKey>
@@ -20,7 +20,7 @@
 		SELECT * FROM DUAL
 	</insert>
 	
-	<delete id="deleteAttatch" parameterType="boardVO">
+	<delete id="deleteAttatch" parameterType="albaVO">
 		DELETE FROM ATTATCH
 		WHERE ATT_NO IN 
 		<foreach collection="delAttNos" item="attNo" open="(" close=")" separator=",">

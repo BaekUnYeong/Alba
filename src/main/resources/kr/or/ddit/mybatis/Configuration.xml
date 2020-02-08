@@ -32,20 +32,3 @@
     <mapper resource="kr/or/ddit/mybatis/mappers/Attatch.xml"/>
   </mappers>
 </configuration>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
