@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.board.dao.IBoardDAO">
+	<sql id="searchFrag">
+		<where>
+		    <if test="searchVO!=null">
+		    	<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchVO.searchWord)">
+		    		<choose>
+		    			<when test="'title'.equals(searchVO.searchType)">
+			    			INSTR(BO_TITLE, #{searchVO.searchWord}) > 0
+		    			</when>
+		    			<when test="'writer'.equals(searchVO.searchType)">
+			    			INSTR(BO_WRITER, #{searchVO.searchWord}) > 0
+		    			</when>
+		    			<when test="'content'.equals(searchVO.searchType)">
+			    			INSTR(BO_CONTENT, #{searchVO.searchWord}) > 0
+		    			</when>
+		    			<otherwise>
+			    			INSTR(BO_TITLE, #{searchVO.searchWord}) > 0
+			    			OR INSTR(BO_WRITER, #{searchVO.searchWord}) > 0
+			    			OR INSTR(BO_CONTENT, #{searchVO.searchWord}) > 0
+		    			</otherwise>
+		    		</choose>
+		    	</if>
+		    </if>
+	    </where>
+	</sql>
+	<select id="selectBoardCount" resultType="int">
+		SELECT COUNT(*)
+		FROM BOARD_JSP
+		<include refid="searchFrag" />
+	</select>
+	<select id="selectBoardList" resultType="boardVO" parameterType="PagingVO">
+		SELECT B.*
+		FROM(
+		SELECT A.*, ROWNUM RNUM
+		FROM (
+			SELECT
+			    BO_NO,    BO_TITLE,    BO_WRITER,
+			    BO_DATE,  BO_HIT,    BO_LIKE, BO_MAIL
+			FROM   BOARD_JSP
+			<include refid="searchFrag" />
+			ORDER BY BO_NO DESC
+		)	A	) B
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}	
+	</select>
+	<resultMap type="boardVO" id="boardMap" autoMapping="true">
+		<id property="bo_no" column="BONO"/>
+		<collection property="attatchList" 
+			ofType="AttatchVO" autoMapping="true" />
+	</resultMap>
+	<select id="selectBoard" parameterType="int" resultMap="boardMap">
+		SELECT
+		    A.BO_NO BONO,		    BO_TITLE,		    BO_WRITER,
+		    BO_PASS,		    BO_CONTENT,		TO_CHAR(BO_DATE, 'YYYY-MM-DD') BO_DATE,
+		    BO_HIT,		    BO_LIKE,		    BO_IP,
+		    BO_MAIL
+		    , ATT_NO,  ATT_SAVENAME,    ATT_FILENAME,
+			  ATT_SIZE,    ATT_fANCY,    ATT_MIME
+		FROM  BOARD_JSP A LEFT OUTER JOIN ATTATCH B ON (A.BO_NO = B.BO_NO)
+		WHERE A.BO_NO = #{bo_no}    
+	</select>
+	<update id="incrementHit" parameterType="int">
+		UPDATE BOARD_JSP
+		SET
+		BO_HIT = BO_HIT + 1
+		WHERE BO_NO = #{bo_no}
+	</update>
+	<update id="incrementLike" parameterType="int">
+		UPDATE BOARD_JSP
+		SET
+		BO_LIKE = BO_LIKE + 1
+		WHERE BO_NO = #{bo_no}
+	</update>
+	<insert id="insertBoard" parameterType="boardVO">
+		<selectKey resultType="int" keyProperty="bo_no" order="BEFORE">
+			SELECT NVL(MAX(BO_NO), 0)+1
+			FROM BOARD_JSP
+		</selectKey>
+		INSERT INTO BOARD_JSP (
+		    BO_NO,    BO_TITLE,    BO_WRITER,
+		    BO_PASS,    BO_CONTENT,    BO_DATE,
+		    BO_IP,	    BO_MAIL
+		) VALUES (
+		    #{bo_no},    #{bo_title},    #{bo_writer},
+		    #{bo_pass},  #{bo_content},    SYSDATE,
+		    #{bo_ip},	 #{bo_mail,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updateBoard" parameterType="boardVO">
+		UPDATE BOARD_JSP
+	    SET
+	    BO_TITLE	=		#{bo_title},
+	    BO_CONTENT	=		#{bo_content},
+	    BO_MAIL		=		#{bo_mail}
+		WHERE  BO_NO =		#{bo_no}
+	</update>
+	<delete id="deleteBoard" parameterType="boardVO" statementType="CALLABLE">
+		{
+			CALL DELETEBOARD(#{bo_no,mode=IN, javaType=INTEGER}, #{rowcnt, mode=OUT, jdbcType=INTEGER})
+		}
+	</delete>
+</mapper>
+
+
+
+
+
+
+

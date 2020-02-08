@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.prod.dao.IProdDAO">
+	<sql id="joinFrag">
+		FROM PROD INNER JOIN LPROD ON (PROD_LGU = LPROD_GU)
+					  INNER JOIN BUYER ON (PROD_BUYER = BUYER_ID)
+	</sql>
+	<sql id="searchFrag">
+		<trim prefix=" WHERE " prefixOverrides="AND">
+		    <if test="searchDetail!=null">
+		    	<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchDetail.prod_lgu)">
+		    		PROD_LGU = #{searchDetail.prod_lgu}
+		    	</if>
+		    	<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchDetail.prod_buyer)">
+		    		AND PROD_BUYER = #{searchDetail.prod_buyer}
+		    	</if>
+		    	<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchDetail.prod_name)">
+		    		AND INSTR(PROD_NAME, #{searchDetail.prod_name}) > 0
+		    	</if>
+		    </if>
+	    </trim>
+	</sql>
+	<select id="selectProdCount" resultType="int" parameterType="PagingVO">
+		SELECT COUNT(*)
+		<include refid="joinFrag" />
+		<include refid="searchFrag" />		
+	</select>
+	<select id="selectProdList" resultType="prodVO" parameterType="PagingVO">
+		SELECT A.*
+		FROM(
+			SELECT PROD_ID, PROD_NAME, TO_CHAR(PROD_INSDATE, 'YYYY-MM-DD') PROD_INSDATE 
+					, PROD_COST, PROD_PRICE, PROD_MILEAGE
+					, PROD_BUYER , BUYER_NAME
+					, PROD_LGU, LPROD_NM
+					, ROWNUM RNUM
+			<include refid="joinFrag" />
+			<include refid="searchFrag" />		  
+		) A	 	  
+		<![CDATA[
+			WHERE RNUM >= #{startRow} AND RNUM <= #{endRow}
+		]]>
+	</select>
+	<resultMap type="prodVO" id="prodMap" autoMapping="true">
+		<id property="prod_id" column="PROD_ID"/>
+<!-- 		<association property="buyer"  -->
+<!-- 			javaType="buyerVO" autoMapping="true" /> -->
+		<collection property="memberList" javaType="java.util.List"
+			ofType="memberVO" autoMapping="true"
+		/>	
+	</resultMap>
+	<select id="selectProd" resultMap="prodMap" parameterType="string">
+		SELECT
+		    PROD_ID,    PROD_NAME,    PROD_LGU,
+		    PROD_BUYER,    PROD_COST,    PROD_PRICE,
+		    PROD_SALE,    PROD_OUTLINE,    PROD_DETAIL,
+		    PROD_IMG,    PROD_TOTALSTOCK,    PROD_INSDATE,
+		    PROD_PROPERSTOCK,    PROD_SIZE,    PROD_COLOR,
+		    PROD_DELIVERY,    PROD_UNIT,    PROD_QTYIN,
+		    PROD_QTYSALE,    PROD_MILEAGE
+		    , BUYER_ID "buyer.buyer_id", 
+		      BUYER_NAME "buyer.buyer_name", 
+		      BUYER_COMTEL "buyer.buyer_comtel", 
+		      BUYER_ADD1 "buyer.buyer_add1", 
+		      BUYER_CHARGER "buyer.buyer_charger"
+		    , LPROD_NM
+		    , MEM_ID, MEM_NAME, MEM_HP, MEM_MAIL, MEM_ADD1, MEM_MILEAGE
+		FROM    PROD INNER JOIN LPROD ON (PROD_LGU = LPROD_GU)
+					 INNER JOIN BUYER ON (PROD_BUYER = BUYER_ID)
+					 LEFT OUTER JOIN CART ON (PROD_ID = CART_PROD)
+					 LEFT OUTER JOIN MEMBER ON (CART_MEMBER = MEM_ID)
+		WHERE PROD_ID = #{prod_id}			 
+	</select>	
+	<insert id="insertProd" parameterType="prodVO">
+		<selectKey resultType="string" keyProperty="prod_id" order="BEFORE">
+			SELECT #{prod_lgu}||LPAD(TO_NUMBER(NVL(SUBSTR( MAX(PROD_ID), 5 ), '0')) + 1, 6, '0')
+			FROM PROD
+			WHERE PROD_LGU = #{prod_lgu}
+		</selectKey>
+	
+		INSERT INTO PROD (
+		    PROD_ID,    PROD_NAME,    PROD_LGU,
+		    PROD_BUYER,    PROD_COST,    PROD_PRICE,
+		    PROD_SALE,    PROD_OUTLINE,    PROD_DETAIL,
+		    PROD_IMG,    PROD_TOTALSTOCK,    
+		    PROD_INSDATE,	
+		    PROD_PROPERSTOCK,    
+		    PROD_SIZE,	PROD_COLOR,
+		    PROD_DELIVERY,    PROD_UNIT,    
+		    PROD_QTYIN,	PROD_QTYSALE,    
+		    PROD_MILEAGE
+		) VALUES (
+		    #{prod_id,jdbcType=VARCHAR},    #{prod_name},    #{prod_lgu},
+		    #{prod_buyer},    #{prod_cost},    #{prod_price},
+		    #{prod_sale},    #{prod_outline},    #{prod_detail,jdbcType=VARCHAR},
+		    #{prod_img},    #{prod_totalstock},    
+		    TO_DATE(#{prod_insdate,jdbcType=DATE}, 'YYYY-MM-DD'),	
+		    #{prod_properstock},    
+		    #{prod_size,jdbcType=VARCHAR},	#{prod_color,jdbcType=VARCHAR},
+		    #{prod_delivery,jdbcType=VARCHAR},    #{prod_unit,jdbcType=VARCHAR},    
+		    #{prod_qtyin,jdbcType=NUMERIC},	#{prod_qtysale,jdbcType=NUMERIC},    
+		    #{prod_mileage,jdbcType=NUMERIC}
+		)
+	</insert>
+	<update id="updateProd" parameterType="prodVO">
+		UPDATE PROD
+		SET
+	    PROD_NAME			=		#{prod_name},
+	    PROD_COST			=		#{prod_cost},
+	    PROD_PRICE			=		#{prod_price},
+	    PROD_SALE			=		#{prod_sale},
+	    PROD_OUTLINE		=		#{prod_outline},
+	    PROD_DETAIL			=		#{prod_detail,jdbcType=VARCHAR},
+	    PROD_TOTALSTOCK		=		#{prod_totalstock},
+	    PROD_PROPERSTOCK	=		#{prod_properstock},
+	    PROD_SIZE			=		#{prod_size,jdbcType=VARCHAR},
+	    PROD_COLOR			=		#{prod_color,jdbcType=VARCHAR},
+	    PROD_DELIVERY		=		#{prod_delivery,jdbcType=VARCHAR},
+	    PROD_UNIT			=		#{prod_unit,jdbcType=VARCHAR},
+	    PROD_QTYIN			=		#{prod_qtyin,jdbcType=NUMERIC},
+	    PROD_QTYSALE		=		#{prod_qtysale,jdbcType=NUMERIC},
+	    PROD_MILEAGE		=		#{prod_mileage,jdbcType=NUMERIC}
+	    <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(prod_img)">
+	    	, PROD_IMG			=		#{prod_img}
+	    </if>
+		WHERE PROD_ID		=		#{prod_id}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
