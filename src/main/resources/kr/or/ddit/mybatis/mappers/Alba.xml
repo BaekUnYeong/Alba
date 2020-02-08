@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.mybatis.mappers.Alba">
-	
+	<update id="updateAlba" parameterType="albaVO">
+		UPDATE alba
+	    SET
+	        al_id =      #{al_id},
+		    al_name =    #{al_name},
+		    al_age =     #{al_age},
+		    al_address = #{al_address},
+		    al_hp =      #{al_hp},
+		    al_spec =    #{al_spec},
+		    al_desc =    #{al_desc},
+		    al_career =  #{al_career},
+		    al_gen =     #{al_gen},
+		    al_btype =   #{al_btype},
+		    al_mail =    #{al_mail}
+		WHERE
+		alba_id = #{alba_id}
+		    
+	</update>
 </mapper>
