@@ -17,6 +17,7 @@
 		    al_mail =    #{al_mail}
 		WHERE
 		alba_id = #{alba_id}
+		
 		    
 	</update>
 </mapper>
