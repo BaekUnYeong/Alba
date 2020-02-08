@@ -12,54 +12,68 @@
 			<thead class="thead-dark">
 				<tr>
 				<th scope="col">알바아이디</th>
-				<td>${buyer.buyer_id}</td>
+				<td>${alba.alba_id}</td>
 			</tr>
 			<tr>
 				<th scope="col">이름</th>
-				<td>${buyer.buyer_name }</td>
+				<td>${alba.alba_name }</td>
 			</tr>
 			<tr>
 				<th scope="col">나이</th>
-				<td>${buyer.buyer_lgu }</td>
+				<td>${alba.alba_age }</td>
 			</tr>
 			<tr>
 				<th scope="col">주소</th>
-				<td>${buyer.buyer_bank}</td>
+				<td>${alba.alba_address}</td>
 			</tr>
 			<tr>
 				<th scope="col">핸드폰번호</th>
-				<td>${buyer.buyer_bankno}</td>
+				<td>${alba.alba_hp}</td>
 			</tr>
 			<tr>
 				<th scope="col">특이사항</th>
-				<td>${buyer.buyer_bankname}</td>
+				<td>${alba.alba_spec}</td>
 			</tr>
 			<tr>
 				<th scope="col">비고</th>
-				<td>${buyer.buyer_zip}</td>
-			</tr>
-			<tr>
-				<th scope="col">학력</th>
-				<td>${buyer.buyer_add1}</td>
+				<td>${alba.alba_desc}</td>
 			</tr>
 			<tr>
 				<th scope="col">경력사항</th>
-				<td>${buyer.buyer_add2}</td>
+				<td>${alba.alba_career}</td>
 			</tr>
 			<tr>
 				<th scope="col">성별</th>
-				<td>${buyer.buyer_comtel}</td>
+				<td>${alba.alba_gen}</td>
 			</tr>
 			<tr>
 				<th scope="col">혈액형</th>
-				<td>${buyer.buyer_fax}</td>
+				<td>${alba.alba_btype}</td>
 			</tr>
 			<tr>
 				<th scope="col">이메일</th>
-				<td>${buyer.buyer_mail}</td>
+				<td>${alba.alba_mail}</td>
 			</tr>
-			
 			</thead>
+			
+			<tbody>
+				<tr>
+					<td colspan="2">
+						<c:url value="/alba/albaView.do" var="albaUpdateURL">
+							<c:param name="what" value="${alba.alba_id }"/>
+						</c:url>
+						<input type="button" value="수정" class="btn btn-success"
+							onclick="location.href='${albaUpdateURL }';"
+						/>
+						<input type="button" value="목록으로" class="btn btn-info" 
+							onclick="location.href='<c:url value="/alba/albaList.do "/>';"
+						/>
+						<input type="button" value="뒤로가기" class="btn btn-info" 
+							onclick="history.back();"
+						/>
+					</td>
+				</tr>
+			</tbody>
 		</table>
 	</body>
 </html>
