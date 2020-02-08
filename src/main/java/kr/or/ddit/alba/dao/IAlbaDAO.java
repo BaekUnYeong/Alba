@@ -9,7 +9,7 @@ import kr.or.ddit.vo.PagingVO;
 public interface IAlbaDAO {
 	public int selectAlbaCount(PagingVO<AlbaVO> pagingVO);
 	public List<AlbaVO> selectAlbaList(PagingVO<AlbaVO> pagingVO);
-	public AlbaVO selectAlba(String buyer_id);
-	public int insertAlba(AlbaVO buyer);
-	public int updateAlba(AlbaVO buyer);
+	public AlbaVO selectAlba(String al_id);
+	public int insertAlba(AlbaVO alba);
+	public int updateAlba(AlbaVO alba);
 }
