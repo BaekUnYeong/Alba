@@ -13,4 +13,5 @@ public interface IAlbaService {
 	public AlbaVO readAlba(String al_id);
 	public ServiceResult createAlba(AlbaVO alba);
 	public ServiceResult modifyAlba(AlbaVO alba);
+	public ServiceResult deleteAlba(AlbaVO alba);
 }

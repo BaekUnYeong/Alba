@@ -6,4 +6,22 @@
 			CALL DELETEALBA(#{al_id, mode=IN, javaType=String}, #{rowcnt, mode=OUT, jdbcType=INTEGER})		
 		}
 	</delete>
+	
+	<update id="updateAlba" parameterType="albaVO">
+		UPDATE alba
+	    SET
+	        al_id =      #{al_id},
+		    al_name =    #{al_name},
+		    al_age =     #{al_age},
+		    al_address = #{al_address},
+		    al_hp =      #{al_hp},
+		    al_spec =    #{al_spec},
+		    al_desc =    #{al_desc},
+		    al_career =  #{al_career},
+		    al_gen =     #{al_gen},
+		    al_btype =   #{al_btype},
+		    al_mail =    #{al_mail}
+		WHERE
+		alba_id = #{alba_id}
+	</update>
 </mapper>

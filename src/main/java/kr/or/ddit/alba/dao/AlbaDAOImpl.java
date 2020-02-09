@@ -63,4 +63,14 @@ public class AlbaDAOImpl implements IAlbaDAO {
 		}
 	}
 
+	@Override
+	public int deleteAlba(AlbaVO alba) {
+		try(
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+		){
+			IAlbaDAO mapper = sqlSession.getMapper(IAlbaDAO.class);
+			return mapper.deleteAlba(alba);
+		}
+	}
+
 }
