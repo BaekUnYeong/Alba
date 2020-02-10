@@ -65,59 +65,6 @@
   	<servlet-name>FrontControllerServlet</servlet-name>
 	<url-pattern>*.do</url-pattern>  
   </servlet-mapping>
-  <servlet>
-  	<servlet-name>DescriptionServlet</servlet-name>
-  	<servlet-class>kr.or.ddit.web.DescriptionServlet</servlet-class>
-  	<init-param>
-  		<param-name>testParam</param-name>
-  		<param-value>파라미터값</param-value>
-  	</init-param>
-  	<init-param>
-  		<param-name>testParam2</param-name>
-  		<param-value>파라미터값2</param-value>
-  	</init-param>
-  	<load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>DescriptionServlet</servlet-name>
-	<url-pattern>/desc</url-pattern>  	
-  </servlet-mapping>
-  <servlet>
-  	<servlet-name>ClasspathImageServlet</servlet-name>
-  	<servlet-class>kr.or.ddit.web.ClasspathImageServlet</servlet-class>
-  	<init-param>
-  		<param-name>imagePath</param-name>
-  		<param-value>/kr/or/ddit/test</param-value>
-  	</init-param>
-  	<load-on-startup>2</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>ClasspathImageServlet</servlet-name>
-	<url-pattern>/image.do</url-pattern>  	
-  </servlet-mapping>
-  <servlet>
-  	<servlet-name>DirectorsServlet</servlet-name>
-  	<servlet-class>kr.or.ddit.web04_model2.DirectorsServlet</servlet-class>
-  	<load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>DirectorsServlet</servlet-name>
-	<url-pattern>/directors.do</url-pattern>  
-  </servlet-mapping>
-  <servlet>
-  	<servlet-name>FileUploadServlet</servlet-name>
-  	<servlet-class>kr.or.ddit.web07_fileupload.FileUploadServlet</servlet-class>
-  	<multipart-config>
-  		<location>d:/temp</location>
-  		<max-file-size>10240000</max-file-size>
-  		<max-request-size>102400000</max-request-size>
-  		<file-size-threshold>10240</file-size-threshold>
-  	</multipart-config>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>FileUploadServlet</servlet-name>
-	<url-pattern>/fileUpload</url-pattern>  
-  </servlet-mapping>
 <!--   <jsp-config> -->
 <!--   	<jsp-property-group> -->
 <!--   		<url-pattern>*.jsp</url-pattern> -->
