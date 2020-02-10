@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.apache.ibatis.type.Alias;
 
 import kr.or.ddit.validator.rules.constraints.NotBlank;
+import kr.or.ddit.validator.rules.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +28,8 @@ public class AlbaVO implements Serializable{
 	private String al_id;
 	@NotBlank(message = "이름 필수")
 	private String al_name;
-	@NotBlank(message = "나이 필수")
-	private int al_age;
+	@NotNull(message = "나이 필수")
+	private Integer al_age;
 	@NotBlank(message = "주소 필수")
 	private String al_address;
 	@NotBlank(message = "핸드폰번호 필수")

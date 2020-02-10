@@ -21,8 +21,8 @@ import lombok.ToString;
 @Alias("licenseVO")
 public class LicenseVO implements Serializable{
 	
+	private String al_id;
 	private String lic_code;
-	private String lic_name;
 	
 	private byte[] lic_img;
 	private PartWrapper lic_image;
