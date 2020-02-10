@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.or.ddit.mybatis.mappers.Alba">
+<mapper namespace="kr.or.ddit.alba.dao.IAlbaDAO">
+	<delete id="deleteAlba" parameterType="albaVO" statementType="CALLABLE">
+		{
+			CALL DELETEALBA(#{al_id, mode=IN, javaType=String}, #{rowcnt, mode=OUT, jdbcType=INTEGER})		
+		}
+	</delete>
+	
 	<update id="updateAlba" parameterType="albaVO">
 		UPDATE alba
 	    SET
@@ -17,6 +23,5 @@
 		    al_mail =    #{al_mail}
 		WHERE
 		alba_id = #{alba_id}
-		    
 	</update>
 </mapper>

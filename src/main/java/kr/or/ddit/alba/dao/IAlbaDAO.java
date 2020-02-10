@@ -12,4 +12,5 @@ public interface IAlbaDAO {
 	public AlbaVO selectAlba(String al_id);
 	public int insertAlba(AlbaVO alba);
 	public int updateAlba(AlbaVO alba);
+	public int deleteAlba(AlbaVO alba);
 }

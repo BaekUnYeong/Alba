@@ -11,6 +11,8 @@ import kr.or.ddit.vo.PagingVO;
 public class AlbaServiceImpl implements IAlbaService {
 	IAlbaDAO dao = new AlbaDAOImpl();
 
+	IAlbaDAO albaDAO = new AlbaDAOImpl();
+	
 	@Override
 	public int readAlbaCount(PagingVO<AlbaVO> pagingVO) {
 		return 0;
@@ -36,4 +38,12 @@ public class AlbaServiceImpl implements IAlbaService {
 		return null;
 	}
 
+	@Override
+	public ServiceResult deleteAlba(AlbaVO alba) {
+		ServiceResult result = ServiceResult.FAIL;
+		int rownum = albaDAO.deleteAlba(alba);
+		if(rownum > 0) result = ServiceResult.OK;
+		return result;
+	}
+	
 }
