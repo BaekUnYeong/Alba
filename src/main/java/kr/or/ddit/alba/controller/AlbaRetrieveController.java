@@ -43,14 +43,17 @@ IAlbaService service = new AlbaServiceImpl();
 			currentPage = Integer.parseInt(pageParam);
 		}
 		
-		PagingVO<AlbaVO> pagingVO = new PagingVO<AlbaVO>();
+		PagingVO<AlbaVO> pagingVO = new PagingVO<AlbaVO>(5,3);
 		pagingVO.setSearchVO(searchVO);
 		
 		pagingVO.setTotalRecord(service.readAlbaCount(pagingVO));
 		
 		pagingVO.setCurrentPage(currentPage);
+		
 		List<AlbaVO> boardList = service.readAlbaList(pagingVO);
+		
 		pagingVO.setDataList(boardList);
+		
 		String viewName = null;
 		if(StringUtils.containsIgnoreCase(accept, "json")) {
 			resp.setContentType("application/json;charset=UTF-8");
@@ -59,7 +62,7 @@ IAlbaService service = new AlbaServiceImpl();
 			return null;
 		}else {
 			req.setAttribute("pagingVO", pagingVO);
-			viewName = "alba/albaList";
+			viewName = "albaList";
 		}
 		return viewName;
 	}

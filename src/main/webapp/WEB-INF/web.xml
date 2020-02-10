@@ -40,7 +40,7 @@
   	<servlet-name>FrontControllerServlet</servlet-name>
   	<servlet-class>kr.or.ddit.mvc.FrontControllerServlet</servlet-class>
   	<init-param>
-  		<param-name>basePakages</param-name>
+  		<param-name>basePackages</param-name>
   		<param-value>
   			kr.or.ddit
   		</param-value>
