@@ -33,7 +33,7 @@ public class FrontControllerServlet extends HttpServlet{
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		String[] basePackages = null;
-		String pkgs = config.getInitParameter("basePakages");
+		String pkgs = config.getInitParameter("basePackages");
 		if(pkgs!=null) {
 			basePackages = pkgs.split("\\s+");
 		}

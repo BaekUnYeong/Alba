@@ -47,7 +47,7 @@ public class AlbaLicenseImageController {
 		if(req instanceof FileUploadRequestWrapper) {
 			PartWrapper imageFile = 
 					((FileUploadRequestWrapper) req).
-					getPartWrapper("??");//chrome F12 활용할것. TODO
+					getPartWrapper("upload");//chrome F12 활용할것. TODO
 			byte[] lic_img = imageFile.getBytes();
 			license.setLic_img(lic_img);
 		}

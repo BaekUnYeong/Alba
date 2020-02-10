@@ -1,10 +1,12 @@
 package kr.or.ddit.alba.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,7 +42,6 @@ public class AlbaInsertController {
 		GradeVO grade = new GradeVO();
 		
 		req.setAttribute("alba", alba);
-		req.setAttribute("license", license);
 		req.setAttribute("grade", grade);
 		
 		try {
@@ -49,11 +50,22 @@ public class AlbaInsertController {
 			throw new RuntimeException(e);
 		}
 		
-		if(req instanceof FileUploadRequestWrapper) {
-			List<PartWrapper> lic_img =
-					((FileUploadRequestWrapper) req).getPartWrappers("lic_img");
-			alba.setAl_spec("al_spec");
-		}
+		req.setAttribute("licenseVO", license);
+		
+		String al_id = req.getParameter("al_id");
+		String lic_code = req.getParameter("lic_code");
+		license.setAl_id(al_id);
+		license.setLic_code(lic_code);
+		
+//		try {
+//			req.getRequestDispatcher(req.getContextPath()+"/alba/albaLicense.do")
+//				.include(req, resp);
+//			license = (LicenseVO) req.getAttribute("licenseVO");
+//		} catch (ServletException | IOException e) {
+//			throw new RuntimeException(e); 
+//		}
+		
+		alba.setAl_spec("al_spec");	//?
 		
 		Map<String, List<CharSequence>> errors = new HashMap<>();
 		req.setAttribute("errors", errors);
@@ -67,10 +79,10 @@ public class AlbaInsertController {
 				viewName = "redirect:/alba/albaView.do?what="+alba.getAl_id();
 			}else {
 				message = "서버 오류, 다시 시도하세요";
-				viewName = "alba/albaForm";
+				viewName = "albaForm";
 			}
 		}else {
-			viewName = "alba/albaForm";
+			viewName = "albaForm";
 		}
 		req.setAttribute("message", message);
 		
