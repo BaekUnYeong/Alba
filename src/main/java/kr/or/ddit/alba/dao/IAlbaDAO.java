@@ -13,4 +13,5 @@ public interface IAlbaDAO {
 	public int insertAlba(AlbaVO alba);
 	public int updateAlba(AlbaVO alba);
 	public int deleteAlba(AlbaVO alba);
+	
 }

@@ -22,6 +22,7 @@ public class AlbaDeleteController {
 	
 	@URIMapping("/alba/albaDelete.do")
 	public String delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		
 		String viewPage = null;
 		
 		String al_id = req.getParameter("al_id");

@@ -13,6 +13,7 @@ public class AlbaServiceImpl implements IAlbaService {
 
 	IAlbaDAO albaDAO = new AlbaDAOImpl();
 	
+	
 	@Override
 	public int readAlbaCount(PagingVO<AlbaVO> pagingVO) {
 		return 0;
