@@ -30,7 +30,7 @@ public class AlbaRetrieveController {
 IAlbaService service = new AlbaServiceImpl();
 	
 //	paging _ search (전체, 작성자, 제목, 내용)
-	@URIMapping("/board/boardList.do")
+	@URIMapping("/alba/albaList.do")
 	public String list(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		String accept = req.getHeader("Accept");
 		String pageParam = req.getParameter("page");
