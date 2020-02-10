@@ -44,4 +44,6 @@ public class AlbaVO implements Serializable{
 	private String al_mail;
 	
 	private String gr_code;
+	
+	private LicenseVO license;
 }
