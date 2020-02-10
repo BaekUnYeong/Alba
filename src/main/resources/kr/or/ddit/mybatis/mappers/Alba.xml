@@ -1,28 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.alba.dao.IAlbaDAO">
-	<delete id="deleteAlba" parameterType="albaVO" statementType="CALLABLE">
+	<sql id="searchFrag">
+		<where>
+			<if test="searchVO!=null">
+				<if
+					test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchVO.searchWord)">
+					<choose>
+						<when test="'name'.equals(searchVO.searchType)">
+							INSTR(AL_NAME, #{searchVO.searchWord}) > 0
+						</when>
+						<when test="'age'.equals(searchVO.searchType)">
+							INSTR(AL_AGE, #{searchVO.searchWord}) > 0
+						</when>
+						<when test="'gen'.equals(searchVO.searchType)">
+							INSTR(AL_GEN, #{searchVO.searchWord}) > 0
+						</when>
+						<when test="'career'.equals(searchVO.searchType)">
+							INSTR(AL_CAREER, #{searchVO.searchWord}) > 0
+						</when>
+						<when test="'spec'.equals(searchVO.searchType)">
+							INSTR(AL_SPEC, #{searchVO.searchWord}) > 0
+						</when>
+						<when test="'mail'.equals(searchVO.searchType)">
+							INSTR(AL_MAIL, #{searchVO.searchWord}) > 0
+						</when>
+						<otherwise>
+							INSTR(AL_NAME, #{searchVO.searchWord}) > 0
+							OR
+							INSTR(AL_AGE, #{searchVO.searchWord}) > 0
+							OR INSTR(AL_GEN,
+							#{searchVO.searchWord}) > 0
+							OR INSTR(AL_CAREER,
+							#{searchVO.searchWord}) > 0
+							OR INSTR(AL_SPEC,
+							#{searchVO.searchWord}) > 0
+							OR INSTR(AL_MAIL,
+							#{searchVO.searchWord}) > 0
+						</otherwise>
+					</choose>
+				</if>
+			</if>
+		</where>
+	</sql>
+	<select id="selectAlbaCount" resultType="int">
+		SELECT COUNT(*)
+		FROM ALBA
+		<include refid="searchFrag" />
+	</select>
+	<select id="selectAlbaList" resultType="albaVO"
+		parameterType="PagingVO">
+		SELECT B.*
+		FROM(
+			SELECT A.*, ROWNUM RNUM
+			FROM (
+				SELECT
+					AL_NAME, AL_AGE,
+					AL_GEN, AL_HP,
+					AL_SPEC, AL_CAREER, AL_MAIL
+				FROM ALBA
+		<include refid="searchFrag" />
+			ORDER BY AL_NAME DESC) A ) B
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+
+	<delete id="deleteAlba" parameterType="albaVO"
+		statementType="CALLABLE">
 		{
-			CALL DELETEALBA(#{al_id, mode=IN, javaType=String}, #{rowcnt, mode=OUT, jdbcType=INTEGER})		
+			CALL DELETEALBA(#{al_id, mode=IN, javaType=String},
+			#{rowcnt, mode=OUT, jdbcType=INTEGER})
 		}
 	</delete>
-	
-	
+
+	<insert id="insertAlba" parameterType="albaVO">
+		<selectKey resultType="String" keyProperty="al_id"
+			order="BEFORE">
+			SELECT 'ALBA_'||LPAD((TO_NUMBER(NVL(SUBSTR(MAX(AL_ID),6),
+				'0')))+1, 3, '0')
+			FROM ALBA;
+		</selectKey>
+		INSERT INTO alba (
+			al_id, al_name, al_age, al_address,
+			al_hp, al_spec, al_desc, gr_code,
+			al_career, al_gen, al_btype, al_mail
+		) VALUES (
+			#{al_id}, #{al_name}, #{al_age}, #{al_address},
+			#{al_hp}, #{al_spec}, #{al_desc}, #{gr_code},
+			#{al_career}, #{al_gen}, #{al_btype}, #{al_mail}
+		)
+	</insert>
+
 	<update id="updateAlba" parameterType="albaVO">
 		UPDATE alba
-	    SET
-	        al_id =      #{al_id},
-		    al_name =    #{al_name},
-		    al_age =     #{al_age},
-		    al_address = #{al_address},
-		    al_hp =      #{al_hp},
-		    al_spec =    #{al_spec},
-		    al_desc =    #{al_desc},
-		    al_career =  #{al_career},
-		    al_gen =     #{al_gen},
-		    al_btype =   #{al_btype},
-		    al_mail =    #{al_mail}
-		WHERE
-		alba_id = #{alba_id}
+		SET
+			al_id = #{al_id},
+			al_name = #{al_name},
+			al_age = #{al_age},
+			al_address = #{al_address},
+			al_hp = #{al_hp},
+			al_spec = #{al_spec},
+			al_desc = #{al_desc},
+			al_career = #{al_career},
+			al_gen = #{al_gen},
+			al_btype = #{al_btype},
+			al_mail = #{al_mail}
+		WHERE alba_id = #{alba_id}
 	</update>
 </mapper>
