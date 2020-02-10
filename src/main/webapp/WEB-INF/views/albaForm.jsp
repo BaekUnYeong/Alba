@@ -12,12 +12,12 @@
 <c:if test="${not empty message }">
 	<div class='error'>${message }</div>
 </c:if>
-<form method="post" >
+<form method="post" enctype="multipart/form-data" >
 	<table class="table table-bordered">
 			<tr>
-				<th>알바생코드//자동생성?</th>
+				<th>알바생코드</th>
 				<td colspan="2"><input class="form-control" type="text" name="al_id" required readonly
-					value="A0000001<%-- ${alba.al_id} --%>" /><span class="error">${errors.al_id}</span></td>
+					value="${alba.al_id}" /><span class="error">${errors.al_id}</span></td>
 			</tr>
 			<tr>
 				<th>이름</th>
@@ -45,7 +45,7 @@
 					<div id="add_license">
 						<select name="al_spec">
 							<option value="">특기사항</option>
-							<c:forEach items="${licenseList}" var="licenseMap">
+							<c:forEach items="${license}" var="licenseMap">
 								<option value="${licenseMap['lic_code'] }">${licenseMap["lic_name"] }</option>
 							</c:forEach>
 						</select>
@@ -72,7 +72,7 @@
 				<td colspan="2">
 					<select class="custom-select" name="gr_code">
 						<option value="">학력</option>
-						<c:forEach items="${gradeList }" var="gradeMap">
+						<c:forEach items="${grade }" var="gradeMap">
 							<option value="${gradeMap['gr_code'] }">${gradeMap["gr_name"] }</option>
 						</c:forEach>
 					</select>

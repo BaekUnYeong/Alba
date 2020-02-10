@@ -21,6 +21,8 @@ import kr.or.ddit.mvc.annotation.HttpMethod;
 import kr.or.ddit.mvc.annotation.URIMapping;
 import kr.or.ddit.validator.GeneralValidator;
 import kr.or.ddit.vo.AlbaVO;
+import kr.or.ddit.vo.GradeVO;
+import kr.or.ddit.vo.LicenseVO;
 
 @CommandHandler
 public class AlbaInsertController {
@@ -28,13 +30,19 @@ public class AlbaInsertController {
 	
 	@URIMapping(value="/alba/albaInsert.do")
 	public String form(HttpServletRequest req, HttpServletResponse resp) {
-		return "alba/albaForm";
+		return "albaForm";
 	}
 	
-	@URIMapping(value="/alba/alvaInsert.do", method=HttpMethod.POST )
+	@URIMapping(value="/alba/albaInsert.do", method=HttpMethod.POST )
 	public String insert(HttpServletRequest req, HttpServletResponse resp) {
 		AlbaVO alba = new AlbaVO();
+		LicenseVO license = new LicenseVO(); 
+		GradeVO grade = new GradeVO();
+		
 		req.setAttribute("alba", alba);
+		req.setAttribute("license", license);
+		req.setAttribute("grade", grade);
+		
 		try {
 			BeanUtils.populate(alba, req.getParameterMap());
 		} catch (IllegalAccessException | InvocationTargetException e) {
@@ -42,9 +50,9 @@ public class AlbaInsertController {
 		}
 		
 		if(req instanceof FileUploadRequestWrapper) {
-			List<PartWrapper> bo_file =
-					((FileUploadRequestWrapper) req).getPartWrappers("bo_file");
-			alba.setAl_spec("al_spec");;
+			List<PartWrapper> lic_img =
+					((FileUploadRequestWrapper) req).getPartWrappers("lic_img");
+			alba.setAl_spec("al_spec");
 		}
 		
 		Map<String, List<CharSequence>> errors = new HashMap<>();
@@ -58,7 +66,7 @@ public class AlbaInsertController {
 			if(ServiceResult.OK.equals(result)) {
 				viewName = "redirect:/alba/albaView.do?what="+alba.getAl_id();
 			}else {
-				message = "서버 오류 쫌따 다시.";
+				message = "서버 오류, 다시 시도하세요";
 				viewName = "alba/albaForm";
 			}
 		}else {

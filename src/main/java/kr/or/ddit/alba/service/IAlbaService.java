@@ -8,7 +8,6 @@ import kr.or.ddit.vo.PagingVO;
 
 public interface IAlbaService {
 
-	
 	public int readAlbaCount(PagingVO<AlbaVO> pagingVO);
 	public List<AlbaVO> readAlbaList(PagingVO<AlbaVO> pagingVO);
 	public AlbaVO readAlba(String al_id);

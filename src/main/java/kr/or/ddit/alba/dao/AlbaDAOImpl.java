@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import kr.or.ddit.mybatis.CustomSqlSessioFactoryBuilder;
 import kr.or.ddit.vo.AlbaVO;
+import kr.or.ddit.vo.LicenseVO;
 import kr.or.ddit.vo.PagingVO;
 
 public class AlbaDAOImpl implements IAlbaDAO {
@@ -44,33 +45,45 @@ public class AlbaDAOImpl implements IAlbaDAO {
 	}
 
 	@Override
-	public int insertAlba(AlbaVO alba) {//insert 수정 필요 TODO
-		try(
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-		) {
-			IAlbaDAO mapper = sqlSession.getMapper(IAlbaDAO.class);
-			return mapper.insertAlba(alba);
-		}
+	public int insertAlba(AlbaVO alba) {
+		return 0;
+	}
+	
+	@Override
+	public int insertAlba(AlbaVO alba, SqlSession sqlSession) {
+		IAlbaDAO mapper = sqlSession.getMapper(IAlbaDAO.class);
+		return mapper.insertAlba(alba);
+	}
+	
+	@Override
+	public int updateAlba(AlbaVO alba) {
+		return 0;
 	}
 
 	@Override
-	public int updateAlba(AlbaVO alba) {//update 수정 필요 TODO
-		try(
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-		) {
-			IAlbaDAO mapper = sqlSession.getMapper(IAlbaDAO.class);
-			return mapper.updateAlba(alba);
-		}
+	public int updateAlba(AlbaVO alba, SqlSession sqlSession) {
+		IAlbaDAO mapper = sqlSession.getMapper(IAlbaDAO.class);
+		return mapper.updateAlba(alba);
 	}
 
 	@Override
 	public int deleteAlba(AlbaVO alba) {
 		try(
-			SqlSession sqlSession = sqlSessionFactory.openSession(true);
+			SqlSession sqlSession = sqlSessionFactory.openSession();
 		){
 			IAlbaDAO mapper = sqlSession.getMapper(IAlbaDAO.class);
 			return mapper.deleteAlba(alba);
 		}
 	}
 
+	@Override
+	public int uploadLicense(LicenseVO license) {
+		return 0;
+	}
+	
+	@Override
+	public int uploadLicense(LicenseVO license, SqlSession sqlSession) {
+		IAlbaDAO mapper = sqlSession.getMapper(IAlbaDAO.class);
+		return mapper.uploadLicense(license);
+	}
 }
