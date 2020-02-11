@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,7 +35,7 @@ public class AlbaInsertController {
 	}
 	
 	@URIMapping(value="/alba/albaInsert.do", method=HttpMethod.POST )
-	public String insert(HttpServletRequest req, HttpServletResponse resp) {
+	public String insert(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		AlbaVO alba = new AlbaVO();
 		LicenseVO license = new LicenseVO(); 
 		GradeVO grade = new GradeVO();
@@ -50,21 +49,21 @@ public class AlbaInsertController {
 			throw new RuntimeException(e);
 		}
 		
-		req.setAttribute("licenseVO", license);
-		
 		String al_id = req.getParameter("al_id");
 		String lic_code = req.getParameter("lic_code");
 		license.setAl_id(al_id);
 		license.setLic_code(lic_code);
+
+		if(req instanceof FileUploadRequestWrapper) {
+			PartWrapper imageFile = 
+					((FileUploadRequestWrapper) req).
+					getPartWrapper("upload");//chrome F12 활용할것. TODO
+			byte[] lic_img = imageFile.getBytes();
+			license.setLic_img(lic_img);
+		}
 		
-//		try {
-//			req.getRequestDispatcher(req.getContextPath()+"/alba/albaLicense.do")
-//				.include(req, resp);
-//			license = (LicenseVO) req.getAttribute("licenseVO");
-//		} catch (ServletException | IOException e) {
-//			throw new RuntimeException(e); 
-//		}
 		
+		alba.setLicense(license);
 		alba.setAl_spec("al_spec");	//?
 		
 		Map<String, List<CharSequence>> errors = new HashMap<>();

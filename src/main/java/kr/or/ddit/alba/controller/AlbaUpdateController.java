@@ -25,6 +25,7 @@ import kr.or.ddit.mvc.annotation.HttpMethod;
 import kr.or.ddit.mvc.annotation.URIMapping;
 import kr.or.ddit.validator.GeneralValidator;
 import kr.or.ddit.vo.AlbaVO;
+import kr.or.ddit.vo.LicenseVO;
 
 @CommandHandler
 public class AlbaUpdateController {
@@ -42,13 +43,14 @@ public class AlbaUpdateController {
 		AlbaVO alba = service.readAlba(alba_id);
 		req.setAttribute("alba", alba);
 		
-		return "alba/albaForm";
+		return "albaForm";
 	}
 	
 	@URIMapping(value = "/alba/albaUpdate.do", method = HttpMethod.POST)
 	public String update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		AlbaVO alba = new AlbaVO(); // command object
+		LicenseVO license = new LicenseVO(); 
 		req.setAttribute("alba", alba);
 		try {
 			BeanUtils.populate(alba, req.getParameterMap());
@@ -56,17 +58,18 @@ public class AlbaUpdateController {
 			throw new RuntimeException(e);
 		}
 		
-//		String saveFolderUrl = "/albaImages";
-//		String realPath = req.getServletContext().getRealPath(saveFolderUrl);
-//		File saveFolder = new File(realPath);
-//		if(!saveFolder.exists()) saveFolder.mkdirs();
-//		if(req instanceof FileUploadRequestWrapper) {
-//			PartWrapper imageFile = ((FileUploadRequestWrapper) req).getPartWrapper("alba_image");
-//			if(imageFile != null && StringUtils.contains(imageFile.getMime(), "image")) {
-//				imageFile.saveFile(saveFolder);
-//				alba.setAlba_img(imageFile.getSavename());
-//			}
-//		}
+		String al_id = req.getParameter("al_id");
+		String lic_code = req.getParameter("lic_code");
+		license.setAl_id(al_id);
+		license.setLic_code(lic_code);
+
+		if(req instanceof FileUploadRequestWrapper) {
+			PartWrapper imageFile = 
+					((FileUploadRequestWrapper) req).
+					getPartWrapper("upload");//chrome F12 활용할것. TODO
+			byte[] lic_img = imageFile.getBytes();
+			license.setLic_img(lic_img);
+		}
 		
 		Map<String, List<CharSequence>> errors = new HashMap<>();
 		req.setAttribute("errors", errors);
