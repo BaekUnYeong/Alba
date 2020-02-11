@@ -1,6 +1,5 @@
 package kr.or.ddit.alba.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -17,8 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import kr.or.ddit.alba.service.AlbaServiceImpl;
 import kr.or.ddit.alba.service.IAlbaService;
 import kr.or.ddit.enumpkg.ServiceResult;
-import kr.or.ddit.file.FileUploadRequestWrapper;
-import kr.or.ddit.file.PartWrapper;
 import kr.or.ddit.hint.UpdateHint;
 import kr.or.ddit.mvc.annotation.CommandHandler;
 import kr.or.ddit.mvc.annotation.HttpMethod;
